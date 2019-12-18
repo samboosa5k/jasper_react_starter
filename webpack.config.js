@@ -2,11 +2,21 @@ const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
+/*
+	React client-side routing:
+		- output.publicPath NEEDS to be '/'
+		- devServer.historyApiFallback NEEDS to be 'true'
+*/
+
 module.exports = {
     entry: './index.js',
     output: {
         filename: 'bundle.[hash].js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve( __dirname, 'dist' ),
+        publicPath: '/'
+    },
+    devServer: {
+        historyApiFallback: true,
     },
     plugins: [
         new HtmlWebpackPlugin({
