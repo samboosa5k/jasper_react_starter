@@ -1,18 +1,12 @@
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
-
-/*
-	React client-side routing:
-		- output.publicPath NEEDS to be '/'
-		- devServer.historyApiFallback NEEDS to be 'true'
-*/
 
 module.exports = {
     entry: './index.js',
     output: {
         filename: 'bundle.[hash].js',
-        path: path.resolve( __dirname, 'dist' ),
+        chunkFilename: 'js/[name].[hash].bundle.js',
+        path: path.join( __dirname, 'dist' ),
         publicPath: '/'
     },
     devServer: {
@@ -21,10 +15,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './index.html'
-        } ),
-        new CopyPlugin( [
-            {from: 'src/images', to: 'dist/images' }
-        ])
+        } )
     ],
     resolve: {
         modules: [__dirname, 'src', 'node_modules'],
@@ -35,18 +26,28 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                loader: require.resolve('babel-loader')
+		loader: require.resolve('babel-loader')
             },
             {
                 test:/\.s?css$/,
                 use:['style-loader','css-loader', 'sass-loader']
             },
-            {
+	    {
                 test: /\.(png|svg|jpg|gif)$/,
-                use: [
-                'file-loader'
-                ]
+                use: ['file-loader?name=img/[name].[ext]']
             }
         ]
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+              vendors: {
+                test: /[\\/]node_modules[\\/]/,
+                name: 'vendors',
+                    chunks: 'all',
+                enforce: true
+              },
+            },
+          },
     }
 }
