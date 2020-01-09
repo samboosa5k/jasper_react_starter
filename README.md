@@ -2,6 +2,10 @@
 
 In my quest for knowledge I wanted to create my own React.js project starter
 
+## Latest Updates
+* Configured for code-splitting with the React.lazy import function
+* Resources like images are output to the correct folders without hash-naming (unnecessary)
+
 ### Prerequisites
 
 Run this:
